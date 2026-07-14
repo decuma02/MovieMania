@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+
+.page-top{
+  @apply bg-blue-500 w-96 h-24 ;
+}
