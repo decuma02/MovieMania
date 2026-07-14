@@ -2,7 +2,9 @@ import React from 'react'
 
 const MovieGridCard = () => {
   return (
-    <div>MovieGridCard</div>
+    <div className="grid-card">
+        
+    </div>
   )
 }
 
