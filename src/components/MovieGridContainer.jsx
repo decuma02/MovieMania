@@ -9,10 +9,7 @@ const MovieGridContainer = ({movies}) => {
         {movies?.map((movie)=>(
             <MovieGridCard
             key={movie.imdbID}
-            name={movie.Title}
-            year={movie.Year}
-            type={movie.Type}
-            poster={movie.Poster}/>))
+            movie={movie}/>))
         }
         
     </div>
