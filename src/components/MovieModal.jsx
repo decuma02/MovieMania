@@ -83,7 +83,7 @@ export default function MovieModal({currentMovie, setModalClicked}) {
           <div className="movie-modal-card-body">
             <div className="movie-modal-card-image-container">
               <img className="movie-modal-card-image"
-              src={modalMovie.Poster}/>
+              src={modalMovie.Poster!=="N/A" ? modalMovie.Poster:"/no-poster.png"}/>
             </div>
             <div className="movie-modal-card-text-container">
               <p className="movie-modal-card-text-description">{modalMovie.Plot}</p>
