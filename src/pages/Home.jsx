@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 import MovieGridContainer from '../components/MovieGridContainer'
 import axios from "axios";
 import toast from 'react-hot-toast';
@@ -13,9 +13,21 @@ export default function Home() {
     const [modalClicked, setModalClicked] = useState(false);
     const [currentMovie, setCurrentMovie] = useState({});
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalResults, setTotalResults] = useState(0);
+
+    const topAnchorRef = useRef(null);
+
+    useEffect(()=>{
+        if(!loading || movies.length>0){
+            topAnchorRef?.current?.scrollIntoView({ behavior: 'smooth', block: 'start'});
+        }
+    },[loading])
+
     useEffect(()=>{
         const timerId = setTimeout(()=>{
             setDebouncingQuery(query);
+            setCurrentPage(1);
         }, 500);
 
         return ()=>{
@@ -30,6 +42,7 @@ export default function Home() {
 
             if(!debouncingQuery.trim()){
                 setMovies([]);
+                setTotalResults(0);
                 return;
             }
             setLoading(true);
@@ -38,14 +51,17 @@ export default function Home() {
                 const response = await axios.get("https://omdbapi.com",{
                     params:{
                         s:debouncingQuery,
-                        apikey:API_KEY
+                        apikey:API_KEY,
+                        page:currentPage
                     }
                 });
 
                 if(response.data.Response=="True"){
                     setMovies(response.data.Search);
+                    setTotalResults(parseInt(response.data.totalResults, 10));  
                 }else{
                     setMovies([]);
+                    setTotalResults(0);
                     toast.error(response.data.Error || "No movies found.");
                 }
             }catch(error){
@@ -57,12 +73,13 @@ export default function Home() {
         }
 
         fetchMovies();
-    }, [debouncingQuery]);
+    }, [debouncingQuery, currentPage]);
 
+    const totalPages =Math.ceil(totalResults/10);
     
   return (
     <div className="home">
-        <div className="page-top"></div>
+        <div ref={topAnchorRef} className="page-top"></div>
         <div className="search-bar">
             <div className="search-icon"></div>
             <input className="search-box"
@@ -82,6 +99,24 @@ export default function Home() {
         movies={movies}
         setCurrentMovie={setCurrentMovie}
         setModalClicked={setModalClicked}/>
+
+        {movies.length>0 && (
+            <div className="pagination-ui">
+                <button
+                className="prev-btn"
+                disabled={currentPage===1 || loading}
+                onClick={()=>{
+                    setCurrentPage(prev=>prev-1);
+                }}>previous</button>
+                <span className="current-page-box">{currentPage}</span>
+                <button
+                className="next-btn"
+                disabled={currentPage===totalPages || loading}
+                onClick={()=>{
+                    setCurrentPage(prev=>prev+1);
+                }}>next</button>
+            </div>
+        )}
     </div>
   )
 }

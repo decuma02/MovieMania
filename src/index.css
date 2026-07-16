@@ -5,15 +5,12 @@
   @apply p-0 m-0 box-border;
 }
 
-html,body{
-  @apply overflow-x-hidden;
-}
 
 .home{
   @apply flex flex-col items-center gap-6;
 }
 .page-top{
-  @apply bg-blue-900 w-screen h-12 z-50;
+  @apply bg-blue-900 w-full h-12 z-50;
 }
 
 .search-bar{
@@ -132,9 +129,29 @@ html,body{
 }
 
 .spin-animate-overlay{
-  @apply w-full h-full z-50 backdrop-blur-[2px] flex items-center justify-center;
+  @apply fixed inset-0 z-50 backdrop-blur-[2px] flex items-center justify-center bg-white/40;
 }
 
 .spin-animate{
   @apply animate-spin mr-3 size-10 border-4 border-transparent border-t-black rounded-full;
+}
+
+.pagination-ui{
+  @apply flex items-center gap-[20px] mb-[40px];
+}
+
+.prev-btn, .next-btn{
+  @apply flex items-center gap-1 px-4 py-2 text-xs md:text-sm font-semibold text-slate-700 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed;
+}
+
+.prev-btn{
+  @apply bg-slate-100 hover:bg-slate-200 border border-slate-300  disabled:hover:bg-slate-100;
+}
+
+.next-btn{
+  @apply bg-blue-500 hover:bg-blue-200 border border-blue-300  disabled:hover:bg-blue-300;
+}
+
+.current-page-box{
+  @apply px-2 py-2 text-base;
 }
