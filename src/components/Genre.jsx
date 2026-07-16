@@ -1,8 +1,7 @@
-export default function Genre({genre}) {
-  console.log(genre);
-  return(
-    <div className="movie-modal-card-genre">
-        {genre}
-    </div>
-  )
+export default function Genre({ genre }) {
+  return (
+    <span className="movie-modal-card-genre">
+      {genre}
+    </span>
+  );
 }

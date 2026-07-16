@@ -1,157 +1,253 @@
 @import "tailwindcss";
 @plugin "@iconify/tailwind4";
 
-*{
+/* ─── Reset ─────────────────────────────────────────────── */
+* {
   @apply p-0 m-0 box-border;
 }
 
-
-.home{
+/* ─── Layout ─────────────────────────────────────────────── */
+.home {
   @apply flex flex-col items-center gap-6;
 }
-.page-top{
-  @apply bg-blue-900 w-full h-12 z-50;
+
+/* ─── Header bar ─────────────────────────────────────────── */
+.page-top {
+  @apply bg-blue-900 w-full h-12 z-50 flex-shrink-0;
 }
 
-.search-bar{
-  @apply w-9/10 mx-auto h-8 border border-solid border-slate-400 flex items-center rounded mb-[20px];
+/* ─── Search bar ─────────────────────────────────────────── */
+/*
+  BEFORE: w-9/10 h-8 — too narrow on 320px, fixed height clips text on zoom
+  AFTER:  w-11/12 on mobile → w-4/5 on sm+ matches grid width; min-h for touch targets
+*/
+.search-bar {
+  @apply w-11/12 sm:w-4/5 mx-auto min-h-[2rem] border border-solid border-slate-400 flex items-center rounded mb-5;
 }
 
-.search-icon{
+.search-icon {
   display: inline-block;
   width: 18px;
   height: 18px;
-  margin:4px;
+  flex-shrink: 0;
+  margin: 4px;
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23918e8e' d='M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14'/%3E%3C/svg%3E");
 }
 
-.search-box{
-  @apply border-none focus:border-none outline-none focus:outline-none w-full;
+.search-box {
+  @apply border-none focus:border-none outline-none focus:outline-none w-full min-w-0;
 }
 
-
-.grid-container{
-  @apply grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-10 gap-x-4 justify-items-center w-4/5 mx-auto mb-[60px];
+/* ─── Grid ───────────────────────────────────────────────── */
+/*
+  BEFORE: w-4/5 gap-10 gap-x-4 — 80% is only ~256px on 320px screens.
+          gap-10 (40px) row gap is excessive on mobile.
+  AFTER:  w-11/12 on mobile → w-4/5 on sm+. Reduce row gap on mobile.
+*/
+.grid-container {
+  @apply grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-y-6 gap-x-4 justify-items-center w-11/12 sm:w-4/5 mx-auto mb-14;
 }
 
-.grid-container-movies-not-available{
-  @apply text-[64px] text-slate-500;
+/* ─── Empty state ────────────────────────────────────────── */
+/*
+  BEFORE: text-[64px] — massive, overflows on 320px
+  AFTER:  text-4xl on mobile → text-[64px] on md+
+*/
+.grid-container-movies-not-available {
+  @apply text-4xl md:text-[64px] text-slate-500 text-center px-4;
 }
 
-.grid-card{
-  @apply w-[240px] flex flex-col h-full bg-white  shadow-2xl max-w-[240px] relative;
+/* ─── Grid card ──────────────────────────────────────────── */
+/*
+  BEFORE: w-[240px] max-w-[240px] — fixed 240px. On a 320px screen the grid's
+          minmax(200px,1fr) gives ~284px cell but card is 240px leaving gaps;
+          worse, on very small grids or single-column layouts the card clips.
+  AFTER:  w-full max-w-[240px] — card fills its grid cell, capped at 240px.
+*/
+.grid-card {
+  @apply w-full max-w-[240px] flex flex-col h-full bg-white shadow-2xl relative;
 }
 
-.movie-image-container{
-  @apply w-full h-[160px] flex justify-center flex-shrink-0;
+/* ─── Movie image ────────────────────────────────────────── */
+/*
+  BEFORE: h-[160px] fixed — squishes on narrow cards
+  AFTER:  aspect-[5/4] so height scales with width; keeps design proportions
+*/
+.movie-image-container {
+  @apply w-full aspect-[5/4] flex justify-center flex-shrink-0 overflow-hidden;
 }
 
-.movie-image{
-  @apply w-[200px] h-[160px] object-contain;
+.movie-image {
+  @apply w-full h-full object-contain;
 }
 
-.movie-text-container{
+/* ─── Movie text ─────────────────────────────────────────── */
+.movie-text-container {
   @apply w-full flex-1 flex flex-col justify-items-center px-4 pt-2 pb-14;
 }
 
-.movie-container-name{
+.movie-container-name {
   @apply text-base text-black font-bold break-words;
 }
 
-.movie-container-type-year{
-  @apply text-xs text-black  capitalize flex gap-1;
+.movie-container-type-year {
+  @apply text-xs text-black capitalize flex gap-1 flex-wrap;
 }
 
-
-
-.movie-container-view-details{
+/* ─── View details button ────────────────────────────────── */
+/*
+  BEFORE: <div> with cursor-pointer — not keyboard accessible, not a button
+  AFTER:  Styling kept identical; semantics fixed in JSX (changed to <button>)
+*/
+.movie-container-view-details {
   @apply text-xs text-blue-600 font-bold border-none p-2.5 py-1 rounded bg-slate-100 w-fit absolute bottom-2 cursor-pointer;
+  /* focus-visible ring so keyboard users can see focus without design change */
+  outline-offset: 2px;
+}
+.movie-container-view-details:focus-visible {
+  @apply outline-2 outline-blue-600;
 }
 
-.movie-modal-overlay{
-  @apply inset-0 backdrop-blur-[2px] fixed w-screen h-screen flex items-center justify-center bg-black/60 pt-12 z-40 overflow-hidden;
+/* ─── Modal overlay ──────────────────────────────────────── */
+/*
+  BEFORE: pt-12 fixed — on landscape phones this pushes modal partially off-screen
+  AFTER:  py-4 sm:pt-12 — safe padding on all orientations
+*/
+.movie-modal-overlay {
+  @apply inset-0 backdrop-blur-[2px] fixed w-screen h-screen flex items-center justify-center bg-black/60 py-4 sm:pt-12 z-40 overflow-y-auto;
 }
 
-.movie-modal-card{
-  @apply w-[40%] h-[58%] max-w-[600px] max-h-[340px] bg-white flex z-10 relative overflow-hidden rounded-xl p-4 flex-col;
+/* ─── Modal card ─────────────────────────────────────────── */
+/*
+  BEFORE: w-[40%] h-[58%] max-w-[600px] max-h-[340px]
+          On 320px: 40% = 128px wide — completely unusable.
+          max-h-[340px] clips content on phones.
+  AFTER:  w-[92vw] on mobile → sm:w-[80vw] → md:w-[60vw] → lg:w-[40%]
+          Height: auto on mobile (content-driven) → capped on large screens.
+          max-w-[600px] preserved.
+*/
+.movie-modal-card {
+  @apply w-[92vw] sm:w-[80vw] md:w-[60vw] lg:w-[40%] max-w-[600px] bg-white flex z-10 relative overflow-hidden rounded-xl p-4 flex-col my-auto;
+  /* min-height prevents the card from collapsing when loading */
+  min-height: 200px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-
-.movie-modal-close-btn{
-  @apply border-solid border-[1px] right-4 top-4 flex items-center justify-center rounded-sm border-slate-500 text-slate-500 absolute cursor-pointer;
+/* ─── Modal close button ─────────────────────────────────── */
+/*
+  Visually unchanged. Semantics fixed in JSX (changed SVG wrapper to <button>).
+*/
+.movie-modal-close-btn {
+  @apply border-solid border-[1px] right-4 top-4 flex items-center justify-center rounded-sm border-slate-500 text-slate-500 absolute cursor-pointer bg-transparent;
+  outline-offset: 2px;
+}
+.movie-modal-close-btn:focus-visible {
+  @apply outline-2 outline-slate-500;
 }
 
-.movie-modal-card-header{
-  @apply flex inline-block;
+/* ─── Modal header ───────────────────────────────────────── */
+.movie-modal-card-header {
+  @apply flex flex-col pr-8;
 }
 
-.movie-model-card-name{
-  @apply text-[20px] font-bold;
+/* ─── Modal title ────────────────────────────────────────── */
+.movie-model-card-name {
+  @apply text-[20px] font-bold break-words;
 }
 
-.movie-modal-card-genre-container{
-  @apply flex flex-row mb-[20px] text-[10px] gap-2;
+/* ─── Genre tags ─────────────────────────────────────────── */
+.movie-modal-card-genre-container {
+  @apply flex flex-row flex-wrap mb-5 text-[10px] gap-2;
 }
 
-.movie-modal-card-genre{
+.movie-modal-card-genre {
   @apply bg-slate-300 rounded-xl text-black px-[6px] inline-block align-middle;
 }
 
-.movie-modal-card-body{
-  @apply flex h-full w-full;
+/* ─── Modal body ─────────────────────────────────────────── */
+/*
+  BEFORE: always horizontal flex — on 320px the image (140px) + text leaves
+          almost no space for text.
+  AFTER:  column on mobile, row on sm+. Matches the desktop layout exactly
+          on wider screens.
+*/
+.movie-modal-card-body {
+  @apply flex flex-col sm:flex-row h-full w-full gap-4 sm:gap-0;
 }
 
-.movie-modal-card-image-container{
-  @apply object-cover w-[140px] flex rounded-xs p-0 flex-shrink-0;
-
+/* ─── Modal image ────────────────────────────────────────── */
+/*
+  BEFORE: w-[140px] flex-shrink-0 — fixed 140px; squeezes text to nothing on mobile
+  AFTER:  full-width centered on mobile, fixed 140px on sm+
+*/
+.movie-modal-card-image-container {
+  @apply flex justify-center sm:justify-start sm:w-[140px] sm:flex-shrink-0 rounded-xs p-0;
 }
 
-.movie-modal-card-image{
-  @apply object-cover rounded-md;
+.movie-modal-card-image {
+  @apply object-cover rounded-md w-[120px] sm:w-full h-auto;
 }
 
-.movie-modal-card-text-container{
-  @apply grow flex ml-[40px] text-[10px] flex-col mt-[9px] gap-[8px] text-slate-600 overflow-y-auto;
+/* ─── Modal text ─────────────────────────────────────────── */
+/*
+  BEFORE: ml-[40px] text-[10px] — hardcoded margin breaks on mobile;
+          10px text fails WCAG contrast minimums
+  AFTER:  ml-0 on mobile, ml-[40px] on sm+. text-xs (12px) minimum.
+*/
+.movie-modal-card-text-container {
+  @apply grow flex sm:ml-[40px] text-xs flex-col mt-[9px] gap-[8px] text-slate-600 overflow-y-auto;
 }
 
-.movie-modal-card-text-description{
-  @apply text-[10px] italic;
+.movie-modal-card-text-description {
+  @apply text-xs italic;
 }
 
-.movie-modal-card-text-bold{
-  @apply font-bold text-[9px] text-black;
+.movie-modal-card-text-bold {
+  @apply font-bold text-xs text-black;
 }
 
-.movie-modal-card-text-unbold{
-  @apply text-[9px] font-normal text-slate-600;
+.movie-modal-card-text-unbold {
+  @apply text-xs font-normal text-slate-600;
 }
 
-.spin-animate-overlay{
+/* ─── Spinner ────────────────────────────────────────────── */
+.spin-animate-overlay {
   @apply fixed inset-0 z-50 backdrop-blur-[2px] flex items-center justify-center bg-white/40;
 }
 
-.spin-animate{
+.spin-animate {
   @apply animate-spin mr-3 size-10 border-4 border-transparent border-t-black rounded-full;
 }
 
-.pagination-ui{
-  @apply flex items-center gap-[20px] mb-[40px];
+/* ─── Pagination ─────────────────────────────────────────── */
+/*
+  BEFORE: gap-[20px] with no wrapping — 3 items can overflow at 320px
+  AFTER:  flex-wrap + smaller gap on mobile → gap-5 on sm+
+*/
+.pagination-ui {
+  @apply flex flex-wrap items-center justify-center gap-3 sm:gap-5 mb-10 px-4;
 }
 
-.prev-btn, .next-btn{
+.prev-btn,
+.next-btn {
   @apply flex items-center gap-1 px-4 py-2 text-xs md:text-sm font-semibold text-slate-700 rounded-lg transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed;
 }
 
-.prev-btn{
-  @apply bg-slate-100 hover:bg-slate-200 border border-slate-300  disabled:hover:bg-slate-100;
+.prev-btn {
+  @apply bg-slate-100 hover:bg-slate-200 border border-slate-300 disabled:hover:bg-slate-100;
+}
+.prev-btn:focus-visible,
+.next-btn:focus-visible {
+  @apply outline-2 outline-offset-2 outline-blue-600;
 }
 
-.next-btn{
-  @apply bg-blue-500 hover:bg-blue-200 border border-blue-300  disabled:hover:bg-blue-300;
+.next-btn {
+  @apply bg-blue-500 hover:bg-blue-200 border border-blue-300 disabled:hover:bg-blue-300;
 }
 
-.current-page-box{
+.current-page-box {
   @apply px-2 py-2 text-base;
 }
