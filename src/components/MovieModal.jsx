@@ -11,6 +11,7 @@ export default function MovieModal({ currentMovie, setModalClicked }) {
   // Refs for focus management
   const dialogRef = useRef(null);
   const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   // ── Lock body scroll ─────────────────────────────────────
   useEffect(() => {
@@ -18,6 +19,14 @@ export default function MovieModal({ currentMovie, setModalClicked }) {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = originalStyle;
+    };
+  }, []);
+
+  // ── Focus restoration: Return focus to the trigger element when modal closes ──
+  useEffect(() => {
+    previousFocusRef.current = document.activeElement;
+    return () => {
+      previousFocusRef.current?.focus();
     };
   }, []);
 
@@ -101,7 +110,6 @@ export default function MovieModal({ currentMovie, setModalClicked }) {
     <div
       className="movie-modal-overlay"
       onClick={handleClose}
-      aria-hidden="true"
     >
       {/* Dialog — stop click propagation */}
       <div
@@ -111,8 +119,6 @@ export default function MovieModal({ currentMovie, setModalClicked }) {
         aria-modal="true"
         aria-labelledby="modal-title"
         onClick={(e) => e.stopPropagation()}
-        // aria-hidden false on dialog so screen readers enter it
-        aria-hidden={false}
       >
         {loading ? (
           <SpinningAnimation />
