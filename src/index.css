@@ -39,6 +39,10 @@ html,body{
   @apply grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-10 gap-x-4 justify-items-center w-4/5 mx-auto mb-[60px];
 }
 
+.grid-container-movies-not-available{
+  @apply text-[64px] text-slate-500;
+}
+
 .grid-card{
   @apply w-[240px] flex flex-col h-full bg-white  shadow-2xl max-w-[240px] relative;
 }

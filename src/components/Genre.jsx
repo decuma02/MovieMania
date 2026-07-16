@@ -1,6 +1,4 @@
-import React from 'react'
-
-const Genre =({genre})=>{
+export default function Genre({genre}) {
   console.log(genre);
   return(
     <div className="movie-modal-card-genre">
@@ -8,5 +6,3 @@ const Genre =({genre})=>{
     </div>
   )
 }
-
-export default Genre

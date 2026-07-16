@@ -1,12 +1,8 @@
-import React from 'react'
-
-const SpinningAnimation = () => {
+export default function SpinningAnimation() {
   return (
     <div className="spin-animate-overlay">
-        <div class="spin-animate">
+        <div className="spin-animate">
         </div>
     </div>
   )
 }
-
-export default SpinningAnimation

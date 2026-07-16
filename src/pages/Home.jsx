@@ -1,11 +1,11 @@
 import {useEffect, useState} from 'react'
 import MovieGridContainer from '../components/MovieGridContainer'
-import axios, { isCancel, AxiosError } from "axios";
+import axios from "axios";
 import toast from 'react-hot-toast';
 import MovieModal from '../components/MovieModal';
 import SpinningAnimation from '../components/SpinningAnimation';
 
-const Home = () => {
+export default function Home() {
     const [movies, setMovies] = useState([]);
     const [query, setQuery] = useState("");
     const [debouncingQuery, setDebouncingQuery] = useState("");
@@ -40,7 +40,7 @@ const Home = () => {
                         s:debouncingQuery,
                         apikey:API_KEY
                     }
-                })
+                });
 
                 if(response.data.Response=="True"){
                     setMovies(response.data.Search);
@@ -50,7 +50,7 @@ const Home = () => {
                 }
             }catch(error){
                 console.log("Error:", error);
-                toast.error("Network error.Failed to reach the movie database...")
+                toast.error("Network error. Failed to reach the movie database...")
             }finally{
                 setLoading(false);
             }
@@ -66,25 +66,22 @@ const Home = () => {
         <div className="search-bar">
             <div className="search-icon"></div>
             <input className="search-box"
-            placeholder='search a movie'
+            placeholder='Search a movie'
             value={query}
             onChange={(e)=>{setQuery(e.target.value)}}></input>
         </div>
         
-        {loading ? <SpinningAnimation/>:(
-            <>
-                {modalClicked &&(<MovieModal
-                    currentMovie={currentMovie}
-                    setModalClicked={setModalClicked}/>)}
-                
-                <MovieGridContainer
-                movies={movies}
-                setCurrentMovie={setCurrentMovie}
-                setModalClicked={setModalClicked}/>
-            </>
+        {loading && <SpinningAnimation/>}
+        {modalClicked &&(<MovieModal
+            currentMovie={currentMovie}
+            setModalClicked={setModalClicked}/>)}
+        {!loading && movies.length===0 && (
+          <div className="grid-container-movies-not-available">Search a movie</div>
         )}
+        <MovieGridContainer
+        movies={movies}
+        setCurrentMovie={setCurrentMovie}
+        setModalClicked={setModalClicked}/>
     </div>
   )
 }
-
-export default Home

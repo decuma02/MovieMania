@@ -1,7 +1,6 @@
-import React from 'react'
 import MovieGridCard from './MovieGridCard'
 
-const MovieGridContainer = ({movies, setCurrentMovie, setModalClicked}) => {
+export default function MovieGridContainer({movies, setCurrentMovie, setModalClicked}) {
   return (
     <div className="grid-container">
         {movies?.map((movie)=>(
@@ -14,5 +13,3 @@ const MovieGridContainer = ({movies, setCurrentMovie, setModalClicked}) => {
     </div>
   )
 }
-
-export default MovieGridContainer

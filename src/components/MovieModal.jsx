@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react'
-import axios, { isCancel, AxiosError } from "axios";
+import axios from "axios";
 import toast from 'react-hot-toast';
 import Genre from './Genre';
 import SpinningAnimation from './SpinningAnimation';
 
-const MovieModal = ({currentMovie, setModalClicked}) => {
+export default function MovieModal({currentMovie, setModalClicked}) {
 
 
   const [modalMovie, setModalMovie] = useState({});
@@ -103,5 +103,3 @@ const MovieModal = ({currentMovie, setModalClicked}) => {
     </div>
   )
 }
-
-export default MovieModal
