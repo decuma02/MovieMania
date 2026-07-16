@@ -1,17 +1,16 @@
 import React from 'react'
 import MovieGridCard from './MovieGridCard'
 
-const MovieGridContainer = ({movies}) => {
-    console.log("Grid Container accessed");
-    console.log(movies);
+const MovieGridContainer = ({movies, setCurrentMovie, setModalClicked}) => {
   return (
     <div className="grid-container">
         {movies?.map((movie)=>(
             <MovieGridCard
             key={movie.imdbID}
-            movie={movie}/>))
+            movie={movie}
+            setCurrentMovie={setCurrentMovie}
+            setModalClicked={setModalClicked}/>))
         }
-        
     </div>
   )
 }

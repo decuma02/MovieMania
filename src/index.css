@@ -1,18 +1,23 @@
 @import "tailwindcss";
+@plugin "@iconify/tailwind4";
 
 *{
   @apply p-0 m-0 box-border;
+}
+
+html,body{
+  @apply overflow-x-hidden;
 }
 
 .home{
   @apply flex flex-col items-center gap-6;
 }
 .page-top{
-  @apply bg-blue-900 w-screen h-12 ;
+  @apply bg-blue-900 w-screen h-12 z-50;
 }
 
 .search-bar{
-  @apply w-9/10 mx-auto h-8 border border-solid border-slate-400 flex items-center rounded;
+  @apply w-9/10 mx-auto h-8 border border-solid border-slate-400 flex items-center rounded mb-[20px];
 }
 
 .search-icon{
@@ -31,7 +36,7 @@
 
 
 .grid-container{
-  @apply grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-10 gap-x-4 justify-items-center w-4/5 mx-auto;
+  @apply grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-10 gap-x-4 justify-items-center w-4/5 mx-auto mb-[60px];
 }
 
 .grid-card{
@@ -58,10 +63,74 @@
   @apply text-xs text-black  capitalize flex gap-1;
 }
 
-.movie-container-bullet-point{
-  
-}
+
 
 .movie-container-view-details{
   @apply text-xs text-blue-600 font-bold border-none p-2.5 py-1 rounded bg-slate-100 w-fit absolute bottom-2 cursor-pointer;
+}
+
+.movie-modal-overlay{
+  @apply inset-0 backdrop-blur-[2px] fixed w-screen h-screen flex items-center justify-center bg-black/60 pt-12 z-40 overflow-hidden;
+}
+
+.movie-modal-card{
+  @apply w-[40%] h-[58%] max-w-[600px] max-h-[340px] bg-white flex z-10 relative overflow-hidden rounded-xl p-4 flex-col;
+}
+
+
+.movie-modal-close-btn{
+  @apply border-solid border-[1px] right-4 top-4 flex items-center justify-center rounded-sm border-slate-500 text-slate-500 absolute cursor-pointer;
+}
+
+.movie-modal-card-header{
+  @apply flex inline-block;
+}
+
+.movie-model-card-name{
+  @apply text-[20px] font-bold;
+}
+
+.movie-modal-card-genre-container{
+  @apply flex flex-row mb-[20px] text-[10px] gap-2;
+}
+
+.movie-modal-card-genre{
+  @apply bg-slate-300 rounded-xl text-black px-[6px] inline-block align-middle;
+}
+
+.movie-modal-card-body{
+  @apply flex h-full w-full;
+}
+
+.movie-modal-card-image-container{
+  @apply object-cover w-[140px] flex rounded-xs p-0 flex-shrink-0;
+
+}
+
+.movie-modal-card-image{
+  @apply object-cover rounded-md;
+}
+
+.movie-modal-card-text-container{
+  @apply grow flex ml-[40px] text-[10px] flex-col mt-[9px] gap-[8px] text-slate-600 overflow-y-auto;
+}
+
+.movie-modal-card-text-description{
+  @apply text-[10px] italic;
+}
+
+.movie-modal-card-text-bold{
+  @apply font-bold text-[9px] text-black;
+}
+
+.movie-modal-card-text-unbold{
+  @apply text-[9px] font-normal text-slate-600;
+}
+
+.spin-animate-overlay{
+  @apply w-full h-full z-50 backdrop-blur-[2px] flex items-center justify-center;
+}
+
+.spin-animate{
+  @apply animate-spin mr-3 size-10 border-4 border-transparent border-t-black rounded-full;
 }

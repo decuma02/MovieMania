@@ -2,13 +2,16 @@ import {useEffect, useState} from 'react'
 import MovieGridContainer from '../components/MovieGridContainer'
 import axios, { isCancel, AxiosError } from "axios";
 import toast from 'react-hot-toast';
+import MovieModal from '../components/MovieModal';
+import SpinningAnimation from '../components/SpinningAnimation';
 
 const Home = () => {
-    console.log(axios.isCancel("something"));
     const [movies, setMovies] = useState([]);
     const [query, setQuery] = useState("");
     const [debouncingQuery, setDebouncingQuery] = useState("");
     const [loading, setLoading] = useState(false);
+    const [modalClicked, setModalClicked] = useState(false);
+    const [currentMovie, setCurrentMovie] = useState({});
 
     useEffect(()=>{
         const timerId = setTimeout(()=>{
@@ -39,8 +42,6 @@ const Home = () => {
                     }
                 })
 
-                console.log(response);
-
                 if(response.data.Response=="True"){
                     setMovies(response.data.Search);
                 }else{
@@ -58,8 +59,6 @@ const Home = () => {
         fetchMovies();
     }, [debouncingQuery]);
 
-
-
     
   return (
     <div className="home">
@@ -71,8 +70,19 @@ const Home = () => {
             value={query}
             onChange={(e)=>{setQuery(e.target.value)}}></input>
         </div>
-        <MovieGridContainer
-        movies={movies}/>
+        
+        {loading ? <SpinningAnimation/>:(
+            <>
+                {modalClicked &&(<MovieModal
+                    currentMovie={currentMovie}
+                    setModalClicked={setModalClicked}/>)}
+                
+                <MovieGridContainer
+                movies={movies}
+                setCurrentMovie={setCurrentMovie}
+                setModalClicked={setModalClicked}/>
+            </>
+        )}
     </div>
   )
 }

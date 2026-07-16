@@ -1,7 +1,6 @@
 import React from 'react'
 
-const MovieGridCard = ({movie}) => {
-  console.log("Grid Card accessed");
+const MovieGridCard = ({movie, setCurrentMovie, setModalClicked}) => {
   return (
     <div className="grid-card">
       <div className="movie-image-container">
@@ -14,7 +13,12 @@ const MovieGridCard = ({movie}) => {
           <span className="movie-container-bullet-point">&bull;</span>
           <span>{movie.Year}</span>
         </div>
-        <div className="movie-container-view-details">View details</div>
+        <div className="movie-container-view-details"
+        onClick={()=>{
+          console.log("Clicked:");
+          setCurrentMovie(movie);
+          setModalClicked(true);
+        }}>View details</div>
       </div>
     </div>
   )
